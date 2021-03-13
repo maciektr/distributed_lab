@@ -1,0 +1,25 @@
+Z1 CONSUMER
+Waiting for messages...
+Received: 1
+Handling finished
+Received: 1
+Handling finished
+Received: 5
+Handling finished
+Received: 1
+Handling finished
+Received: 5
+Handling finished
+
+Z1 CONSUMER
+Waiting for messages...
+Received: 5
+Handling finished
+Received: 1
+Handling finished
+Received: 5
+Handling finished
+Received: 1
+Handling finished
+Received: 5
+Handling finished
