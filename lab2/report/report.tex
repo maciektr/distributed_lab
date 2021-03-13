@@ -96,9 +96,36 @@ Laboratorium II - RabbitMQ}
         W przypadku automatycznego wysyłania potwierdzenia po odbiorze wiadomości serwer nie gwarantuje jej przetworzenia. To jest, w przypadku przerwania przetwarzania w wyniku błędu w procesie konsumenta, system nigdy nie spróbuje ponownie przetworzyć otrzymanej wiadomości. \\
         Jeśli nie zapewnimy przesyłania potwierdzeń w żaden sposób, serwer będzie ponownie wysyłał te same wiadomości do procesu konsumenta, nawet jeśli zostały już przetworzone kilkukrotnie. Każda nowa wiadomość będzie dodawana na koniec kolejki nieprzerwania przesyłanych wiadomości. 
         
-    \section{}
+    \section{Obserwacja mechanizmu równoważenia obciążenia}
+        W ramach obserwacji wysłałem kolejno 10 wiadomości, obsługiwanych przez dwóch klientów. Poniżej zamieszczam wyjście klientów z wyłączon i z włączoną funkcją QOS.
         \lstinputlisting[language=bash]{no_qos.txt}
         \lstinputlisting[language=bash]{qos.txt}
+        Możemy zauważyć, że w wersji bez QOS wiadomości których przetwarzanie zajmuje dużo czasu obsługiwane są zawsze przez tego samego klienta, pomimo że pierwszy klient kończy przetwarzanie dużo szybciej. Dzieje się tak dlatego, RabbitMQ rozdziela wiadomości w momencie w którym dochodzą do kolejki równomiernie pomiędzy klientów, nie biorąc pod uwagę potwierdzeń o ich przetworzeniu. W naszym przypadku pierwszy klient otrzymuje zawsze parzyste, a drugi nieparzyste z wiadomości. \\
+        Po włączeniu obsługi funkcji QOS z argumentem $1$ w klientach kolejki, RabbitMQ nie przydzieli żadnemu z klientów więcej niż jednej wiadomości na raz. To znaczy, że dopóki klient nie zakończy przetwarzania wiadomości, nie otrzyma kolejnej. Dzięki temu, czas w jakim klient przetworzył wiadomość (a konkretniej w jakim wyśle potwierdzenie) wpływa pośrednio na to, kiedy otrzyma następną wiadomość. W wyjściach klientów obserwujemy bardziej równomierne rozłożenie wiadomości.
+        
+    \section{Routing Direct oraz Topic}
+        Wyobraźmy sobie system rozproszony, który przetwarza pewne dane. Może on przesyłać przetwarzane dane pomiędzy węzłami z wykorzystaniem serwera RabbitMQ. Niech "producent" umieszcza odczytane z dysku dane w formie wiadomości w systemie, oznaczając typ przesyłanych danych kluczem w umieszczanej wiadomości. 
+        %Niech klucz będzie zgodny z formatem: [text|media].[csv|json|png|mov]. Pierwszy człon klucza określa czy dane są typu tekstowego, drugi człon koduje informacje o formacie przesyłanych danych. 
+        Niech klucz zawiera informację o formacie przesyłanego pliku, tj. [csv|json|png|mov]. 
+        Załóżmy, że dla każdego z 4 wykorzystywanych w tym eksperymencie formatów plików musimy zaimplementować odpowiedni wyspecjalizowany węzeł zdolny do przetworzenia takich danych w pewien sobie tylko znany sposób.\\
+        Do implementacji takiego systemu możemy wykorzystać exchanger typu direct. Dla każdego z czterech możliwych kluczy definiujemy wprost węzeł docelowy wiadomości. 
+        % \begin{figure}[h!]
+        %     \centering
+        %     \subfloat[Graf zależności]{\includegraphics[width=10cm]{lab10/img/t1.png}}
+        %     \caption{Przykład 2}
+        % \end{figure}
+        \begin{center}
+            \includegraphics[width=10cm]{lab2/report/ex3_1.png}
+        \end{center}\\
+        Teraz wyobraźmy sobie, że oprócz przetworzenia każdej wiadomości na jednym z czterech zdefiniowanych powyżej węzłów, chcemy wykonać pewne dodatkowe zadania. Przykładowo, chcemy każdą wiadomość tekstową zapisać w pewnym logu, a każdą wiadomość z plikiem multimedialnym odesłać do odpowiedniego działu firmy w celu weryfikacji pod kątem treści nieodpowiednich.\\
+        Zmodyfikujmy format klucza przesyłanych wiadomości. Niech klucz będzie zgodny z formatem: [text|media].[csv|json|png|mov]. Pierwszy człon klucza określa czy dane są typu tekstowego, drugi człon koduje informacje o formacie przesyłanych danych.\\
+        W dodatku, okazało się że w wyniku nieporozumienia jeden z producentów każdą z przesyłanych wiadomości typu json oznacza w kluczu jako plik multimedialny.
+        Do wykonania tak zaprojektowanego systemu wykorzystać możemy exchanger typu topic. 
+        \begin{center}
+            \includegraphics[width=10cm]{lab2/report/ex3_2.png}
+        \end{center}\\
+        W
+
         
 \end{document}
 
