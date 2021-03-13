@@ -106,8 +106,8 @@ Laboratorium II - RabbitMQ}
     \section{Routing Direct oraz Topic}
         Wyobraźmy sobie system rozproszony, który przetwarza pewne dane. Może on przesyłać przetwarzane dane pomiędzy węzłami z wykorzystaniem serwera RabbitMQ. Niech "producent" umieszcza odczytane z dysku dane w formie wiadomości w systemie, oznaczając typ przesyłanych danych kluczem w umieszczanej wiadomości. 
         %Niech klucz będzie zgodny z formatem: [text|media].[csv|json|png|mov]. Pierwszy człon klucza określa czy dane są typu tekstowego, drugi człon koduje informacje o formacie przesyłanych danych. 
-        Niech klucz zawiera informację o formacie przesyłanego pliku, tj. [csv|json|png|mov]. 
-        Załóżmy, że dla każdego z 4 wykorzystywanych w tym eksperymencie formatów plików musimy zaimplementować odpowiedni wyspecjalizowany węzeł zdolny do przetworzenia takich danych w pewien sobie tylko znany sposób.\\
+        Niech klucz zawiera informację o formacie przesyłanego pliku, tj. \texttt{[csv|json|png|mov]}. 
+        Załóżmy, że dla każdego z czterech wykorzystywanych w tym eksperymencie formatów plików musimy zaimplementować odpowiedni wyspecjalizowany węzeł zdolny do przetworzenia takich danych w pewien sobie tylko znany sposób.\\
         Do implementacji takiego systemu możemy wykorzystać exchanger typu direct. Dla każdego z czterech możliwych kluczy definiujemy wprost węzeł docelowy wiadomości. 
         % \begin{figure}[h!]
         %     \centering
@@ -115,16 +115,55 @@ Laboratorium II - RabbitMQ}
         %     \caption{Przykład 2}
         % \end{figure}
         \begin{center}
-            \includegraphics[width=10cm]{lab2/report/ex3_1.png}
+            \includegraphics[width=13cm]{lab2/report/ex3_1.png}
         \end{center}\\
         Teraz wyobraźmy sobie, że oprócz przetworzenia każdej wiadomości na jednym z czterech zdefiniowanych powyżej węzłów, chcemy wykonać pewne dodatkowe zadania. Przykładowo, chcemy każdą wiadomość tekstową zapisać w pewnym logu, a każdą wiadomość z plikiem multimedialnym odesłać do odpowiedniego działu firmy w celu weryfikacji pod kątem treści nieodpowiednich.\\
-        Zmodyfikujmy format klucza przesyłanych wiadomości. Niech klucz będzie zgodny z formatem: [text|media].[csv|json|png|mov]. Pierwszy człon klucza określa czy dane są typu tekstowego, drugi człon koduje informacje o formacie przesyłanych danych.\\
-        W dodatku, okazało się że w wyniku nieporozumienia jeden z producentów każdą z przesyłanych wiadomości typu json oznacza w kluczu jako plik multimedialny.
-        Do wykonania tak zaprojektowanego systemu wykorzystać możemy exchanger typu topic. 
+        % \newpage
+        Zmodyfikujmy format klucza przesyłanych wiadomości. Niech klucz będzie zgodny z formatem:\\ \texttt{[text|media].[csv|json|png|mov]}. Pierwszy człon klucza określa czy dane są typu tekstowego, drugi człon koduje informacje o formacie przesyłanych danych.\\
+        W dodatu pliki json o rozmiarze zbyt dużym dla naszego mało wydajnego systemu logów chcemy móc oznaczyć kluczem media.json. Tak zaadresowana wiadomość nie powinna trafić do węzła obsługi logów.
+        Do wykonania tak zaprojektowanego systemu wykorzystać możemy exchanger typu topic, np. w sposób zaprezentowany na poniższym diagramie. 
         \begin{center}
-            \includegraphics[width=10cm]{lab2/report/ex3_2.png}
+            \includegraphics[width=13cm]{lab2/report/ex3_2.png}
         \end{center}\\
-        W
+        Dla pierwszego przykładu konfiguracja systemu może wyglądać następująco. 
+        \begin{enumerate}
+            \item Klucze przy wiązaniu kolejek: \begin{itemize}
+                \item Q1 - csv
+                \item Q2 - json
+                \item Q3 - png
+                \item Q4 - mov
+                \end{itemize}
+            \item Klucze w przesyłanych wiadomościach: kluczem każdej z wiadomości jest jedno z czterech słów - csv, json, png, mov
+            \item Odbiorcy przykładowych wiadomości: każdy z odbiorców otrzymuje wiadomość o kluczach takich samych jak klucz przypisany do kolejki podczas wiązania
+        \end{enumerate}
+        Dla drugiego przykładu konfiguracja systemu może wyglądać następująco. 
+        \begin{enumerate}
+            \item Klucze przy wiązaniu kolejek: \begin{itemize}
+                \item Q1 - text.csv
+                \item Q2 - *.json
+                \item Q3 - media.png
+                \item Q4 - media.mov
+                \item Q5 - media.*
+                \item Q6 - text.*
+                \end{itemize}
+            \item Klucze w przesyłanych wiadomościach:
+                Wiadomość może zawierać jeden z następujących kluczy:
+                \begin{itemize}
+                    \item text.csv
+                    \item text.json
+                    \item media.json
+                    \item media.png
+                    \item media.mov
+                \end{itemize}
+            \item Odbiorcy przykładowych wiadomości: 
+                \begin{itemize}
+                    \item text.csv - C1 oraz C6
+                    \item text.json - C2 oraz C6
+                    \item media.json - C2
+                    \item media.png - C3 oraz C5
+                    \item media.mov - C4 oraz C5
+                \end{itemize}
+        \end{enumerate}
 
         
 \end{document}
