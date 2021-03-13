@@ -23,7 +23,10 @@ public class Z1_Producer {
         channel.queueDeclare(QUEUE_NAME, false, false, false, null);        
 
         // producer (publish msg)
-        String message = "Hello world!";
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+//        String message = "Hello world!";
+        System.out.println("Enter message to be sent:");
+        String message = br.readLine();
 
         channel.basicPublish("", QUEUE_NAME, null, message.getBytes());
         System.out.println("Sent: " + message);
