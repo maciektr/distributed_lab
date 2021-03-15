@@ -9,6 +9,7 @@ class Settings:
     SERVER_PORT = 8080
     MSG_ENCODING = 'utf-8'
     MSG_SIZE = 1024
+    UDP_MSG_SIZE = 2048
 
 
 msg_encode = msg_encoder(Settings().MSG_ENCODING)

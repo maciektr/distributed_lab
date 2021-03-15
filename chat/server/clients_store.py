@@ -4,8 +4,9 @@ from server.settings import msg_encode
 
 
 class Client:
-    def __init__(self, conn: socket.socket):
+    def __init__(self, conn: socket.socket, addr):
         self.conn = conn
+        self.addr = addr
 
     def close(self):
         if self.conn:
@@ -46,5 +47,14 @@ class ClientsStore:
                 continue
             try:
                 client.send(msg)
+            except BrokenPipeError:
+                self.close_client(client)
+
+    def send_to_all_udp(self, msg, sender_addr, udp_socket):
+        for client in self.store:
+            if client.addr == sender_addr:
+                continue
+            try:
+                udp_socket.sendto(msg_encode(msg), client.addr)
             except BrokenPipeError:
                 self.close_client(client)
