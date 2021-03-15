@@ -105,15 +105,9 @@ Laboratorium II - RabbitMQ}
         
     \section{Routing Direct oraz Topic}
         Wyobraźmy sobie system rozproszony, który przetwarza pewne dane. Może on przesyłać przetwarzane dane pomiędzy węzłami z wykorzystaniem serwera RabbitMQ. Niech "producent" umieszcza odczytane z dysku dane w formie wiadomości w systemie, oznaczając typ przesyłanych danych kluczem w umieszczanej wiadomości. 
-        %Niech klucz będzie zgodny z formatem: [text|media].[csv|json|png|mov]. Pierwszy człon klucza określa czy dane są typu tekstowego, drugi człon koduje informacje o formacie przesyłanych danych. 
         Niech klucz zawiera informację o formacie przesyłanego pliku, tj. \texttt{[csv|json|png|mov]}. 
         Załóżmy, że dla każdego z czterech wykorzystywanych w tym eksperymencie formatów plików musimy zaimplementować odpowiedni wyspecjalizowany węzeł zdolny do przetworzenia takich danych w pewien sobie tylko znany sposób.\\
         Do implementacji takiego systemu możemy wykorzystać exchanger typu direct. Dla każdego z czterech możliwych kluczy definiujemy wprost węzeł docelowy wiadomości. 
-        % \begin{figure}[h!]
-        %     \centering
-        %     \subfloat[Graf zależności]{\includegraphics[width=10cm]{lab10/img/t1.png}}
-        %     \caption{Przykład 2}
-        % \end{figure}
         \begin{center}
             \includegraphics[width=13cm]{lab2/report/ex3_1.png}
         \end{center}\\
@@ -164,46 +158,4 @@ Laboratorium II - RabbitMQ}
                     \item media.mov - C4 oraz C5
                 \end{itemize}
         \end{enumerate}
-
-        
 \end{document}
-
-    % \section{Pomiary czasu wykonania programu}
-    %     \begin{itemize}
-    %         \item Szerokość obrazu: 850
-    %         \item Wysokość obrazu: 800
-    %         \item Liczba iteracji: 1000
-    %         \item Przybliżenie: 300
-    %     \end{itemize}
-    %     \begin{center}
-    %         \begin{table}[ht]
-    %             \centering
-    %             \begin{tabular}{|c|c|c|}
-    %                 \hline
-    %                 Liczba wątków w egzekutorze  & Liczba podproblemów & Średni czas wykonania (milisekundy) \\
-    %                 \specialrule{1pt}{1pt}{1pt}
-    %                 1 & 1 & 790 \\
-    %                 \hline
-    %                 4 & 4 & 450 \\
-    %                 \hline
-    %                 8  & 4 & 450 \\
-    %                 \hline 
-    %                 8 & 8 & 360 \\
-    %                 \hline
-    %                 8 & 16 & 240\\
-    %                 \hline
-    %                 8 & 80 & 210\\
-    %                 \hline
-    %                 8 & 800 & 220\\
-    %                 \hline 
-    %                 16 & 16 & 240\\
-    %                 \hline
-    %                 16 & 32 & 220\\
-    %                 \hline
-    %                 16 & 160 & 210\\
-    %                 \hline
-    %                 \end{tabular}
-    %             \caption{Pomiar czasów wykonania}
-    %             \label{tab:my_label}
-    %         \end{table}
-    %     \end{center}
