@@ -1,12 +1,3 @@
-import com.rabbitmq.client.AMQP;
-import com.rabbitmq.client.BuiltinExchangeType;
-import com.rabbitmq.client.Channel;
-import com.rabbitmq.client.Connection;
-import com.rabbitmq.client.ConnectionFactory;
-import com.rabbitmq.client.Consumer;
-import com.rabbitmq.client.DefaultConsumer;
-import com.rabbitmq.client.Envelope;
-
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.Scanner;
@@ -19,6 +10,8 @@ public class Team extends Common{
     public Team(String teamName) throws IOException, TimeoutException {
         super();
         this.teamName = teamName;
+        channel.queueBind(adminQueueName, adminExchangeName, "team.*");
+        channel.basicConsume(adminQueueName, true, getAdminConsumer());
     }
 
     @Override

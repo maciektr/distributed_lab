@@ -1,5 +1,4 @@
 import com.rabbitmq.client.AMQP;
-import com.rabbitmq.client.BuiltinExchangeType;
 import com.rabbitmq.client.Consumer;
 import com.rabbitmq.client.DefaultConsumer;
 import com.rabbitmq.client.Envelope;
@@ -20,6 +19,9 @@ public class Supplier extends Common {
         products = declaration.split(" ");
         for(String product : products)
             getQueue(product);
+
+        channel.queueBind(adminQueueName, adminExchangeName, "*.supplier");
+        channel.basicConsume(adminQueueName, true, getAdminConsumer());
     }
 
     private class ChannelConsume implements Callable<Object>{

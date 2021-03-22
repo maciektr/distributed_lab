@@ -1,21 +1,23 @@
-import com.rabbitmq.client.BuiltinExchangeType;
-import com.rabbitmq.client.Channel;
-import com.rabbitmq.client.Connection;
-import com.rabbitmq.client.ConnectionFactory;
+import com.rabbitmq.client.*;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.concurrent.TimeoutException;
 
 public abstract class Common {
     static final String exchangeName = "MARKET_EXCHANGE";
     private static final String queueNamePrefix = "QUEUE_";
+    final String adminExchangeName;
+    final String adminQueueName;
 
     Channel channel;
 
     public Common() throws IOException, TimeoutException {
         channel = getChannel();
         channel.exchangeDeclare(exchangeName, BuiltinExchangeType.DIRECT);
-
+        adminExchangeName = Admin.adminExchangeName;
+        channel.exchangeDeclare(adminExchangeName, BuiltinExchangeType.TOPIC);
+        adminQueueName = channel.queueDeclare().getQueue();
     }
 
     void getQueue(String productName) throws IOException {
@@ -34,5 +36,15 @@ public abstract class Common {
 
     static String getQueueName(String productName){
         return queueNamePrefix + productName;
+    }
+
+    Consumer getAdminConsumer(){
+        return new DefaultConsumer(channel) {
+            @Override
+            public void handleDelivery(String consumerTag, Envelope envelope, AMQP.BasicProperties properties, byte[] body) {
+                String message = new String(body, StandardCharsets.UTF_8);
+                System.out.println("Admin message: " + message);
+            }
+        };
     }
 }
