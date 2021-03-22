@@ -5,9 +5,6 @@ import com.rabbitmq.client.Envelope;
 
 import java.io.IOException;
 import java.util.Scanner;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.concurrent.TimeoutException;
 
 public class Supplier extends Common {
@@ -23,9 +20,8 @@ public class Supplier extends Common {
         channel.queueBind(adminQueueName, adminExchangeName, "*.supplier");
         channel.basicConsume(adminQueueName, true, getAdminConsumer());
     }
-
-    private class ChannelConsume implements Callable<Object>{
-        private final Consumer consumer = new DefaultConsumer(channel) {
+    public void consume() throws IOException {
+        Consumer consumer = new DefaultConsumer(channel) {
             @Override
             public void handleDelivery(String consumerTag, Envelope envelope, AMQP.BasicProperties properties, byte[] body) throws IOException {
                 Message message = new Message(body);
@@ -34,23 +30,8 @@ public class Supplier extends Common {
             }
         };
 
-        private final String product;
-
-        public ChannelConsume(String product){
-            this.product = product;
-        }
-
-        public Object call() throws IOException {
-            channel.basicConsume(getQueueName(product), false, consumer);
-            return null;
-        }
-    }
-
-    public void consume(){
-        ExecutorService executor = Executors.newFixedThreadPool(products.length);
         for(String product : products)
-            executor.submit(new ChannelConsume(product));
-        System.out.println("Waiting for messages...");
+            channel.basicConsume(getQueueName(product), false, consumer);
     }
 
     public static void main(String[] argv) throws IOException, TimeoutException {
