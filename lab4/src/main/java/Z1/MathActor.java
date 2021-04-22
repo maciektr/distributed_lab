@@ -65,10 +65,13 @@ public class MathActor extends AbstractBehavior<MathActor.MathCommand> {
         actorMultiply = getContext().spawn(MathActorMultiply.create(), "actorMultiply");
         actorDivide = getContext().spawn(MathActorDivide.create(), "actorDivide");
 
-        // TODO: uncomment this to change supervisor strategy
+        // uncomment this to change supervisor strategy (restart/resume/stop)
 //        actorMultiply = getContext().spawn(
 //                Behaviors.supervise(MathActorMultiply.create())
-//                        .onFailure(Exception.class, SupervisorStrategy.restart()), "actorMultiply");
+//                        .onFailure(Exception.class, SupervisorStrategy.resume()), "actorMultiply");
+//        actorDivide = getContext().spawn(
+//                Behaviors.supervise(MathActorDivide.create())
+//                        .onFailure(Exception.class, SupervisorStrategy.resume()), "actorDivide");
 
     }
 

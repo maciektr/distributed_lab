@@ -7,6 +7,7 @@ import akka.actor.typed.javadsl.Behaviors;
 import akka.actor.typed.javadsl.Receive;
 
 public class MathActorDivide extends AbstractBehavior<MathActor.MathCommandDivide> {
+    private int callCounter = 0;
 
     // --- use messages from MathActor -> no need to define new ones
 
@@ -32,6 +33,8 @@ public class MathActorDivide extends AbstractBehavior<MathActor.MathCommandDivid
         int result = mathCommandDivide.firstNumber / mathCommandDivide.secondNumber;
         System.out.println("actorDivide: divide result = " + result);
         System.out.println("actorDivide: sending response");
+        callCounter++;
+        System.out.println("actorDivide: number of calls = " + callCounter);
         mathCommandDivide.replyTo.tell(new MathActor.MathCommandResult(result));
         return this;
     }
