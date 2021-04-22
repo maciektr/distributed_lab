@@ -12,11 +12,16 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class ActorTextService extends AbstractBehavior<ActorTextService.Command>  {
-
     // --- messages
     interface Command {}
 
-    // TODO: new message type implementing Command, with Receptionist.Listing field
+    public static class ReceptionistResponse implements Command {
+        final Receptionist.Listing listing;
+
+        public ReceptionistResponse(Receptionist.Listing listing) {
+            this.listing = listing;
+        }
+    }
 
     public static class Request implements Command {
         final String text;
@@ -28,15 +33,16 @@ public class ActorTextService extends AbstractBehavior<ActorTextService.Command>
 
 
     // --- constructor and create
-    // TODO: field for message adapter
+    private ActorRef<Receptionist.Listing> receptionistResponseAdapter;
     private List<ActorRef<String>> workers = new LinkedList<>();
 
     public ActorTextService(ActorContext<ActorTextService.Command> context) {
         super(context);
-
-        // TODO: create message adapter
-
-        // TODO: subscribe to receptionist (with message adapter)
+        receptionistResponseAdapter = context.messageAdapter(Receptionist.Listing.class, ReceptionistResponse::new);
+        context
+            .getSystem()
+            .receptionist()
+            .tell(Receptionist.subscribe(ActorUpperCase.upperCaseServiceKey, receptionistResponseAdapter));
     }
 
     public static Behavior<Command> create() {
@@ -51,7 +57,7 @@ public class ActorTextService extends AbstractBehavior<ActorTextService.Command>
 
         return newReceiveBuilder()
                 .onMessage(Request.class, this::onRequest)
-                // TODO: handle the new type of message
+                .onMessage(ReceptionistResponse.class, this::onReceptionistResponse)
                 .build();
     }
 
@@ -64,6 +70,11 @@ public class ActorTextService extends AbstractBehavior<ActorTextService.Command>
         return this;
     }
 
-    // TODO: handle the new type of message
+    private Behavior<Command> onReceptionistResponse(ReceptionistResponse msg){
+        Receptionist.Listing listing = msg.listing;
+        this.workers = new LinkedList<>();
+        this.workers.addAll(listing.getAllServiceInstances(ActorUpperCase.upperCaseServiceKey));
+        return this;
+    }
 
 }

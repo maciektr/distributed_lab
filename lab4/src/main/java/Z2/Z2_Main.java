@@ -17,7 +17,7 @@ public class Z2_Main {
 
                     // send text
                     Thread.sleep(2000);
-                    actorTextService.tell(new ActorTextService.Request("hello"));
+                    actorTextService.tell(new ActorTextService.Request("Hello World"));
 
                     return Behaviors.receive(Void.class)
                             .onSignal(Terminated.class, sig -> Behaviors.stopped())
