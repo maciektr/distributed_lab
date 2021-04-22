@@ -7,8 +7,8 @@ mkdir /tmp/zookeeper1
 mkdir /tmp/zookeeper2
 mkdir /tmp/zookeeper3
 echo "1" > /tmp/zookeeper1/myid
-echo "2" > /tmp/zookeeper1/myid
-echo "3" > /tmp/zookeeper1/myid
+echo "2" > /tmp/zookeeper2/myid
+echo "3" > /tmp/zookeeper3/myid
 ```
 
 Running servers
