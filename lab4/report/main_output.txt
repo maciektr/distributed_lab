@@ -1,0 +1,9 @@
+[z2main-akka.actor.default-dispatcher-5] INFO akka.event.slf4j.Slf4jLogger - Slf4jLogger started
+akka://z2main/user/upper1 registered
+akka://z2main/user/upper2 registered
+creating receive for text service
+request: Hello World
+sending to worker: Actor[akka://z2main/user/upper2#-1230464315]
+sending to worker: Actor[akka://z2main/user/upper1#-64627655]
+HELLO WORLD
+HELLO WORLD

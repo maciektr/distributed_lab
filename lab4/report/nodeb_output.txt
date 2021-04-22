@@ -1,0 +1,15 @@
+Node B: config: Config(SimpleConfigObject({"akka":{"actor":{"provider":"cluster"},"cluster":{"downing-provider-class":"akka.cluster.sbr.SplitBrainResolverProvider","seed-nodes":["akka://ClusterSystem@127.0.0.1:2551","akka://ClusterSystem@127.0.0.1:2552"]},"remote":{"artery":{"canonical":{"hostname":"127.0.0.1","port":2552}}}}}))
+[ClusterSystem-akka.actor.default-dispatcher-3] INFO akka.event.slf4j.Slf4jLogger - Slf4jLogger started
+[ClusterSystem-akka.actor.default-dispatcher-3] INFO akka.remote.artery.tcp.ArteryTcpTransport - Remoting started with transport [Artery tcp]; listening on address [akka://ClusterSystem@127.0.0.1:2552] with UID [5746936340724038105]
+[ClusterSystem-akka.actor.default-dispatcher-3] INFO akka.cluster.Cluster - Cluster Node [akka://ClusterSystem@127.0.0.1:2552] - Starting up, Akka version [2.6.14] ...
+[ClusterSystem-akka.actor.default-dispatcher-3] INFO akka.cluster.Cluster - Cluster Node [akka://ClusterSystem@127.0.0.1:2552] - Registered cluster JMX MBean [akka:type=Cluster]
+[ClusterSystem-akka.actor.default-dispatcher-3] INFO akka.cluster.Cluster - Cluster Node [akka://ClusterSystem@127.0.0.1:2552] - Started up successfully
+[ClusterSystem-akka.actor.default-dispatcher-3] INFO akka.cluster.sbr.SplitBrainResolver - SBR started. Config: strategy [KeepMajority], stable-after [20 seconds], down-all-when-unstable [15 seconds], selfUniqueAddress [akka://ClusterSystem@127.0.0.1:2552#5746936340724038105], selfDc [default].
+Enter your message
+creating receive for text service
+[ClusterSystem-akka.actor.default-dispatcher-3] INFO akka.cluster.Cluster - Cluster Node [akka://ClusterSystem@127.0.0.1:2552] - Received InitJoinAck message from [Actor[akka://ClusterSystem@127.0.0.1:2551/system/cluster/core/daemon#1113986733]] to [akka://ClusterSystem@127.0.0.1:2552]
+[ClusterSystem-akka.actor.default-dispatcher-3] INFO akka.cluster.Cluster - Cluster Node [akka://ClusterSystem@127.0.0.1:2552] - Welcome from [akka://ClusterSystem@127.0.0.1:2551]
+
+request: Hello World
+sending to worker: Actor[akka://ClusterSystem@127.0.0.1:2551/user/upper1#-642519709]
+sending to worker: Actor[akka://ClusterSystem@127.0.0.1:2551/user/upper2#-633129337]
