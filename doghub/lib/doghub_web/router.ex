@@ -17,6 +17,7 @@ defmodule DoghubWeb.Router do
     pipe_through :browser
 
     get "/", PageController, :index
+    get "/result", PageController, :result
   end
 
   scope "/api", DoghubWeb do

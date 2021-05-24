@@ -1,0 +1,10 @@
+<section class="">
+<img src=<%= @data["profile"][:avatar_url] %> />
+<div><%= @data["profile"][:name] %></div>
+<div><%= @data["profile"][:bio] %></div>
+
+<%= for repo <- @data["profile"][:repos] do%>
+    <p><%= repo %></p>
+<% end %>
+
+</section>

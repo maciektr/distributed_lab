@@ -1,6 +1,6 @@
 <section class="">
 
-<form action="/api/profile" method="get">
+<form action="/result" method="get">
   <label for="name">Github username:</label>
   <input type="text" id="name" name="name"><br><br>
   <label for="name">Dog breed:</label>
@@ -11,6 +11,5 @@
   </select>
   <input type="submit" value="Submit">
 </form>
-
 
 </section>

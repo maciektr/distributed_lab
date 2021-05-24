@@ -15,7 +15,7 @@ defmodule DoghubWeb.ProfileController do
     end
   end
 
-  defp construct_profile(username, breed) do
+  def construct_profile(username, breed) do
     with {:ok, dog_fact} <- fetch_dog_fact(),
          {:ok, dog_photo} <- fetch_dog_photo(breed, username),
          {:ok, github_profile} <- fetch_github_profile(username) do
@@ -24,7 +24,22 @@ defmodule DoghubWeb.ProfileController do
         |> Map.put(:avatar_url, dog_photo)
         |> Map.put(:bio, dog_fact)
 
-      {:ok, result}
+      repos_url = Map.get(github_profile, :repos_url)
+
+      with {:ok, repos} <- fetch_repo_list(repos_url) do
+        result = result |> Map.put(:repos, repos)
+        {:ok, result}
+      end
+    end
+  end
+
+  defp fetch_repo_list(url) do
+    with {:ok, _, body} <- ApiClient.get(url) do
+      parse_node = fn node ->
+        node |> Map.take([:full_name, :html_url])
+      end
+
+      {:ok, body |> Enum.map(parse_node)}
     end
   end
 
