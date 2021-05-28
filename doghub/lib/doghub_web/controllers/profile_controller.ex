@@ -3,7 +3,7 @@ defmodule DoghubWeb.ProfileController do
 
   alias DoghubWeb.ApiClient
 
-  @dog_fact_url "https://dog-facts-api.herokuapp.com/api/v1/resources/dogs?number=1"
+  @dog_fact_url "https://dog-fact.herokuapp.com/api/v1/resources/dogs?number=1"
   @dog_photo_url "https://dog.ceo/api/breeds/image/random"
   @github_user_fetch_url "https://api.github.com/users/"
 

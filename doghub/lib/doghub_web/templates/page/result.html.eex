@@ -4,7 +4,7 @@
 <div><%= @data["profile"][:bio] %></div>
 
 <%= for repo <- @data["profile"][:repos] do%>
-    <p><%= repo %></p>
+    <a href="<%= repo[:html_url] %>"><%= repo[:full_name] %></a><br />
 <% end %>
 
 </section>
