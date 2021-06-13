@@ -1,5 +1,6 @@
 .vscode/
 *.sqlite
+/venv/
 
 # Created by https://www.toptal.com/developers/gitignore/api/c,vs,osx,c++,linux,python,windows,intellij+all,visualstudiocode,jupyternotebooks,elixir,phoenix
 # Edit at https://www.toptal.com/developers/gitignore?templates=c,vs,osx,c++,linux,python,windows,intellij+all,visualstudiocode,jupyternotebooks,elixir,phoenix
