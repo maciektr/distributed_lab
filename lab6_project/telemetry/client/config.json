@@ -1,0 +1,22 @@
+{
+    "server": "127.0.0.1:50051",
+    "sender_id": "de0df347-a422-496d-b93c-a0c5eb04fe58",
+    "client_strategy": {
+        "strategy": "buffer",
+        "buffer_time": 2.0
+    },
+    "meters": [
+        {
+            "type": "water",
+            "id": "5134cb1f-f7fc-4f2c-a388-9ae56dfa3b41"
+        },
+        {
+            "type": "electricity",
+            "id": "1b5ec378-df04-4d70-bbd5-bd441d5e6c7b"
+        },
+        {
+            "type": "temperature",
+            "id": "1ecb5b7f-28f8-4638-9800-c32bb3bc9495"
+        }
+    ]
+}

@@ -1,0 +1,40 @@
+syntax = "proto3";
+package telemetry_client;
+
+message Reading{
+    message ElectricityMeter{
+        int32 reading = 1;
+        string type = 2;
+    }
+
+    message TemperatureMeter{
+        float reading = 1;
+    }
+
+    message WaterMeter{
+        int32 reading = 1;
+    }
+
+    oneof meter {
+        WaterMeter water = 5;
+        ElectricityMeter electricity = 6;
+        TemperatureMeter temperature = 7;
+    }
+
+    string meter_id = 1;
+    string sender_id = 2;
+    string timestamp = 3;
+}
+
+message Readings {
+    repeated Reading readings = 1;
+}
+
+message Response {
+
+}
+
+service Telemetry{
+  rpc sendReading (Reading) returns (Response) {};
+  rpc sendReadings (Readings) returns (Response) {};
+}
